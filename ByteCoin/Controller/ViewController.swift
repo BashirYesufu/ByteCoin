@@ -17,13 +17,16 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        coinManager.delegate = self
+        currencyPicker.dataSource = self
+        currencyPicker.dataSource = self
     }
 
 
 }
 
 //MARK: - CoinManagerDelegate
-
 extension ViewController: CoinManagerDelegate {
     func didUpdatePrice(price: String, currency: String) {
         DispatchQueue.main.async {
@@ -35,6 +38,24 @@ extension ViewController: CoinManagerDelegate {
     func didFailWithError(error: Error) {
         print(error)
     }
+}
+
+//MARK: - UIPickerView Delegate and DataSource
+extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
     
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return coinManager.currencyArray.count
+    }
     
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return coinManager.currencyArray[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let selectedCurrency = coinManager.currencyArray[row]
+        coinManager.getCoinPrice(for: selectedCurrency)
+    }
 }
