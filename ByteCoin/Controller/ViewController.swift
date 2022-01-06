@@ -20,10 +20,8 @@ class ViewController: UIViewController {
         
         coinManager.delegate = self
         currencyPicker.dataSource = self
-        currencyPicker.dataSource = self
+        currencyPicker.delegate = self
     }
-
-
 }
 
 //MARK: - CoinManagerDelegate
